@@ -28,11 +28,13 @@ export const MenuItem = ({
   active,
   item,
   children,
+  className,
 }: {
   setActive: (item: string) => void;
   active: string | null;
   item: string;
   children?: React.ReactNode;
+  className?: string
 }) => {
   return (
     <div onMouseEnter={() => setActive(item)} className="relative ">
@@ -40,7 +42,7 @@ export const MenuItem = ({
         transition={{ duration: 0.3 }}
         className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
       >
-        {item}
+        <span className={className}>{item}</span>
       </motion.p>
       {active !== null && (
         <motion.div
@@ -99,7 +101,7 @@ export const Menu = ({
           <DropdownMenuTrigger asChild>
           <button>{resolvedTheme === "dark" ? <FiMoon className="w-7"/> : <FiSun className="w-7" />}</button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-auto">
+          <DropdownMenuContent className="w-auto mt-4 z-50 fixed right-0">
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => setTheme('light')}>
                 <span>Light</span>
@@ -150,13 +152,13 @@ export const ProductItem = ({
   );
 };
 
-export const HoveredLink = ({ children, ...rest }: any) => {
+export const HoveredLink = ({ children, className, ...rest }: any) => {
   return (
     <Link
       {...rest}
       className="text-neutral-700 dark:text-neutral-200 hover:text-black "
     >
-      {children}
+      <span className={className}>{children}</span>
     </Link>
   );
 };

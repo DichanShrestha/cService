@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className} style={{ maxWidth: "100vw", overflowX: "hidden" }}>
         <StoreProvider>
           {children}
           <Toaster />

@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { HydrationOverlay } from "@builder.io/react-hydration-overlay";
 
 const Wrapper = ({
   children,
@@ -10,15 +11,16 @@ const Wrapper = ({
   className?: string;
 }) => {
   return (
-    <div className={className}>
-      <Navbar />
-      <div className="mt-[56px]">
-        <hr className=" border-gray-400 my-4" />
-
-        {children}
+    <HydrationOverlay>
+      <div className={className}>
+        <Navbar />
+        <div className="mt-[56px]">
+          <hr className=" border-gray-400 my-4" />
+          {children}
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </HydrationOverlay>
   );
 };
 
