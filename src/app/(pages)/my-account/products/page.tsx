@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 const Page = () => {
@@ -14,10 +15,12 @@ const Page = () => {
     price: 0,
     image: null as File | null,
   });
-
-  const submit = () => {
-    // Add submit logic here
-  };
+  const [imageURL, setImageURL] = useState<string>('/defaultImg.png');
+  const [imgDimension, setImgDimension] = useState({
+    height: 0 as number,
+    width: 0 as number,
+  })
+  const [imgLoading, setImgLoading] = useState<boolean>(false);
 
   const addImg = async (e: FormEvent) => {
     e.preventDefault();
@@ -27,12 +30,17 @@ const Page = () => {
       formData.append("localFilePath", product.image);
     }
 
-    const response = await axios.post("/api/cloudinary-upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    console.log(response.data);
+    try {
+      setImgLoading(true)
+      const response = await axios.post("/api/cloudinary-upload", formData);
+      console.log(response.data.data);
+      setImageURL(response.data.data.url)
+      setImgDimension({height: response.data.data.height, width: response.data.data.width})
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setImgLoading(false)
+    }
   };
 
   return (
@@ -61,8 +69,8 @@ const Page = () => {
               }
             />
           </div>
-          <Button onClick={addImg} className="mt-8" variant="outline">
-            Add Image
+          <Button onClick={addImg} className="mt-8" variant="outline" disabled={imgLoading}>
+            {imgLoading ? <><Loader2 className="animate-spin h-4 w-4 mr-2"/>Uploading</> : <>Add Image</>}
           </Button>
         </div>
         <div className="flex flex-col lg:flex-row lg:space-x-4">
@@ -120,7 +128,7 @@ const Page = () => {
               />
             </div>
             <div>
-              <Button variant="outline" className="mt-8">
+              <Button variant="outline" className="mt-8" onClick={addImg}>
                 Submit
               </Button>
             </div>
@@ -135,7 +143,9 @@ const Page = () => {
               category={product.category}
               price={product.price}
               stocks={product.stocks}
-              image={product.image? URL.createObjectURL(product.image!): ""} // This will display the selected image
+              image={imageURL}
+              height={imgDimension.height}
+              width={imgDimension.width}
             />
           </div>
         </div>

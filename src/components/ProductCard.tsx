@@ -12,6 +12,8 @@ export default function ProductCard({
   category = "category",
   stocks = 2,
   image = "",
+  height = 0,
+  width = 0,
 }: {
   className?: string;
   name: string;
@@ -19,6 +21,8 @@ export default function ProductCard({
   category: string;
   stocks: number;
   image: string;
+  width: number;
+  height: number;
 }) {
   const [reviews, setReviews] = useState(0);
   return (
@@ -38,9 +42,9 @@ export default function ProductCard({
 
           <CardItem translateZ="100" className="w-full mt-4">
             <Image
-              src="/defaultImg.png"
-              height="800"
-              width="800"
+              src={image}
+              height={height}
+              width={width}
               className="h-40 w-full object-cover rounded-xl group-hover/card:shadow-xl"
               alt="thumbnail"
             />
